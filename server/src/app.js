@@ -1,6 +1,6 @@
 import express from "express";
 import logger from "./middleware/logger.middleware.js";
-import cros from "cors";
+import cors from "cors";
 
 const app = express();
 
@@ -11,7 +11,7 @@ app.use(logger);
 //cors
 app.use(
   cors({
-    origin:"https://localhost:5173",
+    origin:"http://localhost:5173",
     credentials:true,
   })
 );
