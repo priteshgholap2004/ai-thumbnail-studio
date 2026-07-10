@@ -2,11 +2,13 @@ import express from "express";
 import logger from "./middleware/logger.middleware.js";
 import cors from "cors";
 import userRoutes from "./routes/user.routes.js";
+import cookieParser from "cookie-parser";
 
 const app = express();
 
 // Middleware
 app.use(express.json());
+app.use(cookieParser());
 app.use(logger);
 
 app.use("/api/users",userRoutes);
