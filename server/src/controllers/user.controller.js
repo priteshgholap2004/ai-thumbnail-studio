@@ -116,7 +116,7 @@ export const loginUser= async (req,res) => {
                     credits:user.credits,
                 },
             });
-            
+
     }catch(error)
     {
         res.status(500).json({
@@ -126,4 +126,38 @@ export const loginUser= async (req,res) => {
     }
 
     
+};
+
+//getprofile
+
+import asyncHandler from "../utils/asyncHandler.js";
+
+export const getProfile = asyncHandler(async(req,res)=>{
+
+    const user = await User.findById(
+        req.user.userId
+    ).select("-password");
+
+    if(!user){
+        throw new Error("User not found");
+    }
+    res.status(200).json({
+        success:true,
+        user,
+    });
+});
+
+//logout
+
+export const logoutUser = (req,res) => {
+    res.clearCookie("token",{
+        httpOnly:true,
+        secure: false,
+        sameSite:"lax",
+    })
+    .status(200)
+    .json({
+        success:true,
+        message:"Logged out successfully",
+    });
 };

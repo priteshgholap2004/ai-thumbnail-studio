@@ -3,6 +3,7 @@ import logger from "./middleware/logger.middleware.js";
 import cors from "cors";
 import userRoutes from "./routes/user.routes.js";
 import cookieParser from "cookie-parser";
+import errorHandler from "./middleware/error.middleware.js";
 
 const app = express();
 
@@ -25,5 +26,7 @@ app.use(
 app.get("/", (req, res) => {
   res.send("🚀 AI Thumbnail Studio Backend is Running...");
 });
+
+app.use(errorHandler);
 
 export default app;
