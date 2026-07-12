@@ -5,6 +5,8 @@ import userRoutes from "./routes/user.routes.js";
 import cookieParser from "cookie-parser";
 import errorHandler from "./middleware/error.middleware.js";
 
+import thumbnailRoutes from "./routes/thumbnail.routes.js";
+
 const app = express();
 
 // Middleware
@@ -13,6 +15,9 @@ app.use(cookieParser());
 app.use(logger);
 
 app.use("/api/users",userRoutes);
+
+app.use("/api/thumbnails",thumbnailRoutes);
+
 
 //cors
 app.use(
