@@ -26,3 +26,11 @@ export const uploadImage = async (buffer) => {
     Readable.from(buffer).pipe(uploadStream);
   });
 };
+
+export const deleteImage = async (publicId) => {
+
+  const result = await cloudinary.uploader.destroy(publicId);
+
+  return result;
+
+};

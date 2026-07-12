@@ -1,7 +1,10 @@
 import asyncHandler from "../utils/asyncHandler.js";
 import { enhancePrompt } from "../services/gemini.service.js";
 import { generateThumbnailAI } from "../services/thumbnail.service.js";
-import { uploadImage } from "../services/cloudinary.service.js";
+import { 
+  uploadImage,
+  deleteImage,
+ } from "../services/cloudinary.service.js";
 import Thumbnail from "../models/thumbnail.model.js";
 
 export const generateThumbnail = asyncHandler(async (req, res) => {
@@ -43,6 +46,68 @@ export const generateThumbnail = asyncHandler(async (req, res) => {
     success: true,
     message: "Thumbnail generated successfully",
     data: thumbnail,
+  });
+
+});
+
+export const getUserThumbnails = asyncHandler(async (req, res) => {
+
+  const thumbnails = await Thumbnail.find({
+    user: req.user.userId,
+  }).sort({
+    createdAt: -1,
+  });
+
+  res.status(200).json({
+    success: true,
+    count: thumbnails.length,
+    data: thumbnails,
+  });
+
+});
+
+export const getThumbnailById = asyncHandler(async (req, res) => {
+
+  const thumbnail = await Thumbnail.findOne({
+    _id: req.params.id,
+    user: req.user.userId,
+  });
+
+  if (!thumbnail) {
+    return res.status(404).json({
+      success: false,
+      message: "Thumbnail not found",
+    });
+  }
+
+  res.status(200).json({
+    success: true,
+    data: thumbnail,
+  });
+
+});
+
+export const deleteThumbnail = asyncHandler(async (req, res) => {
+
+  const thumbnail = await Thumbnail.findOne({
+    _id: req.params.id,
+    user: req.user.userId,
+  });
+
+  if (!thumbnail) {
+    return res.status(404).json({
+      success: false,
+      message: "Thumbnail not found",
+    });
+  }
+
+  await deleteImage(thumbnail.publicId);
+
+  await thumbnail.deleteOne();
+
+  res.status(200).json({
+    success: true,
+    message: "Thumbnail deleted successfully",
   });
 
 });
