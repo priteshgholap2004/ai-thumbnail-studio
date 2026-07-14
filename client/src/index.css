@@ -1,1 +1,27 @@
 @import "tailwindcss";
+
+html{
+    font-family:"Inter",sans-serif;
+    scroll-behavior:smooth;
+}
+
+body{
+    background:#020617;
+}
+
+@keyframes fadeSlide {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade {
+  animation: fadeSlide 0.45s ease;
+}
+

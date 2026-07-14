@@ -12,12 +12,6 @@ const app = express();
 // Middleware
 app.use(express.json());
 app.use(cookieParser());
-app.use(logger);
-
-app.use("/api/users",userRoutes);
-
-app.use("/api/thumbnails",thumbnailRoutes);
-
 
 //cors
 app.use(
@@ -26,6 +20,14 @@ app.use(
     credentials:true,
   })
 );
+
+app.use(logger);
+
+app.use("/api/users",userRoutes);
+
+app.use("/api/thumbnails",thumbnailRoutes);
+
+
 
 // Home Route
 app.get("/", (req, res) => {
