@@ -1,8 +1,8 @@
 const HistoryGrid = () => {
   return (
-    <section className="mt-12">
+    <section className="mt-8">
 
-      <div className="mb-8 flex items-center justify-between">
+      <div className="mb-6 flex items-center justify-between">
 
         <h2 className="text-2xl font-bold text-white">
 
@@ -18,7 +18,7 @@ const HistoryGrid = () => {
 
       </div>
 
-      <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+      <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
 
         {Array.from({ length: 4 }).map((_, index) => (
 
