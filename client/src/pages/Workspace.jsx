@@ -1,7 +1,7 @@
 import WorkspaceNavbar from "../components/workspace/WorkspaceNavbar";
 import PromptForm from "../components/workspace/PromptForm";
 import PreviewPanel from "../components/workspace/PreviewPanel";
-import HistoryGrid from "../components/workspace/HistoryGrid";
+import HistoryGrid from "../components/workspace/History/HistoryGrid";
 
 import { useEffect } from "react";
 import { useThumbnail } from "../context/ThumbnailContext";

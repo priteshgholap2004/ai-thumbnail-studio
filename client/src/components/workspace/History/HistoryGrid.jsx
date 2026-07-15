@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
-import ImageModal from "./ImageModal";
+import ImageModal from "../ImageModal";
 import { Trash2, Download } from "lucide-react";
-import { useThumbnail } from "../../context/ThumbnailContext";
-import DeleteModal from "./DeleteModal";
+import { useThumbnail } from "../../../context/ThumbnailContext";
+import DeleteModal from "../DeleteModal";
 
 const HistoryGrid = () => {
 
