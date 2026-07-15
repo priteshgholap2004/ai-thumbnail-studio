@@ -24,7 +24,9 @@ Requirements:
 - Add ultra realistic details.
 - Add high contrast.
 - Mention the aspect ratio.
-- Do NOT add any text inside the image.
+Include large, bold, readable thumbnail text when appropriate.
+Use 3–4 impactful words.
+Make typography professional and highly visible.
 
 User Prompt:
 ${prompt}

@@ -8,7 +8,7 @@ export const generateThumbnail = async (data) => {
 
 // Get User History
 export const getThumbnailHistory = async () => {
-    const response = await api.get("/thumbnails/history");
+    const response = await api.get("/thumbnails");
     return response.data;
 };
 

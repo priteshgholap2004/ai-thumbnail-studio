@@ -8,6 +8,10 @@ import {
     EyeOff,
 } from "lucide-react";
 
+import { registerUser } from "../services/auth.service";
+import { useNavigate } from "react-router-dom";
+
+
 const Register = () => {
     const [formData, setFormData] = useState({
         fullName: "",
@@ -15,6 +19,8 @@ const Register = () => {
         password: "",
         confirmPassword: "",
     });
+
+    const navigate = useNavigate();
 
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -72,14 +78,28 @@ const Register = () => {
 
         if (!validateForm()) return;
 
-        setLoading(true);
+        try {
+            setLoading(true);
 
-        // Simulate API call
-        await new Promise((resolve) => setTimeout(resolve, 1500));
+            const response = await registerUser({
+                name: formData.fullName,
+                email: formData.email,
+                password: formData.password,
+            });
 
-        console.log(formData);
+            console.log(response);
 
-        setLoading(false);
+            alert(response.message);
+
+            navigate("/login");
+        } catch (error) {
+            alert(
+                error.response?.data?.message ||
+                "Registration failed"
+            );
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (

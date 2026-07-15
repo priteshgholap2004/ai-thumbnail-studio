@@ -3,7 +3,16 @@ import PromptForm from "../components/workspace/PromptForm";
 import PreviewPanel from "../components/workspace/PreviewPanel";
 import HistoryGrid from "../components/workspace/HistoryGrid";
 
+import { useEffect } from "react";
+import { useThumbnail } from "../context/ThumbnailContext";
+
+
 const Workspace = () => {
+  const { fetchHistory } = useThumbnail();
+
+  useEffect(() => {
+    fetchHistory();
+  }, []);
   return (
     <>
       <WorkspaceNavbar />
@@ -17,14 +26,14 @@ const Workspace = () => {
 
         <div className="absolute -right-32 bottom-20 h-72 w-72 rounded-full bg-violet-500/5 blur-[180px]" />
 
-        <div className="relative z-10 mx-auto max-w-7xl px-6 py-8">
+        <div className="relative z-10 mx-auto max-w-7xl px-4 md:px-6 py-6 md:py-8">
 
-          <div className="mb-6">
-            <h1 className="text-3xl font-black text-white">
+          <div className="mb-5 md:mb-6">
+            <h1 className="text-2xl md:text-3xl font-black text-white">
               PNG Workspace
             </h1>
 
-            <p className="mt-1 text-slate-400">
+            <p className="mt-1 text-sm md:text-base text-slate-400">
               Create professional YouTube assets powered by AI.
             </p>
           </div>

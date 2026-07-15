@@ -6,10 +6,26 @@ import {
   deleteImage,
 } from "../services/cloudinary.service.js";
 import Thumbnail from "../models/Thumbnail.model.js";
+import User from "../models/User.model.js";
 
 // Generate Thumbnail
 export const generateThumbnail = asyncHandler(async (req, res) => {
   const { prompt, style, aspectRatio } = req.body;
+  const user = await User.findById(req.user.userId);
+
+  if (!user) {
+    return res.status(404).json({
+      success: false,
+      message: "User not found",
+    });
+  }
+
+  if (user.credits < 2) {
+    return res.status(400).json({
+      success: false,
+      message: "Not enough credits",
+    });
+  }
 
   if (!prompt?.trim()) {
     return res.status(400).json({
@@ -24,11 +40,22 @@ export const generateThumbnail = asyncHandler(async (req, res) => {
     aspectRatio
   );
 
-  const imageBuffer = await generateThumbnailAI(
-    enhancedPrompt
-  );
+  let uploadedImage;
 
-  const uploadedImage = await uploadImage(imageBuffer);
+  try {
+    const imageBuffer = await generateThumbnailAI(
+      enhancedPrompt
+    );
+
+    uploadedImage = await uploadImage(imageBuffer);
+
+  } catch (error) {
+    return res.status(503).json({
+      success: false,
+      message:
+        "AI service is temporarily busy. Please try again in a few moments.",
+    });
+  }
 
   const thumbnail = await Thumbnail.create({
     user: req.user.userId,
@@ -40,10 +67,14 @@ export const generateThumbnail = asyncHandler(async (req, res) => {
     aspectRatio,
   });
 
+  user.credits -= 2;
+  await user.save();
+
   res.status(201).json({
     success: true,
     message: "Thumbnail generated successfully",
     data: thumbnail,
+    credits: user.credits,
   });
 });
 
