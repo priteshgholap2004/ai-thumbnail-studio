@@ -3,13 +3,12 @@ import ImageModal from "../ImageModal";
 import { Trash2, Download } from "lucide-react";
 import { useThumbnail } from "../../../context/ThumbnailContext";
 import DeleteModal from "../DeleteModal";
+import HistoryCard from "./HistoryCard";
+import SearchBar from "./SearchBar";
+import FilterBar from "./FilterBar";
 
 const HistoryGrid = () => {
 
-  const [selectedImage, setSelectedImage] = useState(null);
-
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [thumbnailToDelete, setThumbnailToDelete] = useState(null);
 
   const {
     history,
@@ -17,11 +16,22 @@ const HistoryGrid = () => {
     fetchHistory,
     removeThumbnail,
     setThumbnail,
+    setEditingThumbnail,
+    regenerate,
   } = useThumbnail();
 
-  useEffect(() => {
-    fetchHistory();
-  }, []);
+  const [selectedImage, setSelectedImage] = useState(null);
+
+  const [search, setSearch] = useState("");
+
+  const [selectedStyle, setSelectedStyle] = useState("All");
+
+  const styles = [
+    ...new Set(history.map((item) => item.style)),
+  ];
+
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [thumbnailToDelete, setThumbnailToDelete] = useState(null);
 
   const downloadImage = async (item) => {
     try {
@@ -55,8 +65,42 @@ const HistoryGrid = () => {
     }
   };
 
+  const filteredHistory = history.filter((item) => {
+
+    const matchesSearch =
+      `${item.originalPrompt} ${item.style}`
+        .toLowerCase()
+        .includes(search.toLowerCase());
+
+    const matchesStyle =
+      selectedStyle === "All" ||
+      item.style === selectedStyle;
+
+    return matchesSearch && matchesStyle;
+
+  });
+
+  useEffect(() => {
+    fetchHistory();
+  }, []);
+
   return (
     <section className="mt-10">
+
+      <div className="mb-5">
+
+        <SearchBar
+          value={search}
+          onChange={setSearch}
+        />
+
+        <FilterBar
+          styles={styles}
+          selected={selectedStyle}
+          onSelect={setSelectedStyle}
+        />
+
+      </div>
 
       <div className="mb-6 flex items-center justify-between">
 
@@ -115,65 +159,49 @@ const HistoryGrid = () => {
 
         <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
 
-          {history.map((item) => (
+          {filteredHistory.map((item) => (
 
-            <div
+            <HistoryCard
               key={item._id}
-              className="group overflow-hidden rounded-2xl border border-white/10 bg-white/5 transition-all duration-300 hover:-translate-y-1 hover:border-violet-500"
-            >
+              item={item}
 
-              <img
-                src={item.imageUrl}
-                alt={item.originalPrompt}
-                onClick={() => {
-                  setThumbnail(item);
-                  setSelectedImage(item);
-                }}
-                className="aspect-video w-full cursor-pointer object-cover transition duration-300 group-hover:scale-105"
-              />
+              onPreview={(image) => {
+                setThumbnail(image);
+                setSelectedImage(image);
+              }}
 
-              <div className="p-4">
+              onDownload={downloadImage}
 
-                <h3 className="truncate font-semibold text-white">
-                  {item.originalPrompt}
-                </h3>
+              onDelete={(image) => {
+                setThumbnailToDelete(image._id);
+                setShowDeleteModal(true);
+              }}
 
-                <div className="mt-2 flex items-center justify-between">
+              onEdit={(image) => {
 
-                  <span className="rounded-full bg-slate-800 px-2 py-1 text-xs text-slate-300">
-                    {item.style}
-                  </span>
+                setEditingThumbnail(image);
 
-                  <span className="text-xs text-slate-500">
-                    {item.aspectRatio}
-                  </span>
+                window.scrollTo({
+                  top: 0,
+                  behavior: "smooth",
+                });
 
-                </div>
+              }}
 
-                <div className="mt-4 flex justify-end gap-2">
+              onRegenerate={async (image) => {
 
-                  <button
-                    onClick={() => downloadImage(item)}
-                    className="flex h-10 w-10 items-center justify-center rounded-lg bg-slate-700 transition hover:bg-violet-600"
-                  >
-                    <Download size={18} className="text-white" />
-                  </button>
+                try {
 
-                  <button
-                    onClick={() => {
-                      setThumbnailToDelete(item._id);
-                      setShowDeleteModal(true);
-                    }}
-                    className="rounded-lg bg-red-600 p-2 text-white transition hover:bg-red-500"
-                  >
-                    <Trash2 size={17} />
-                  </button>
+                  await regenerate(image);
 
-                </div>
+                } catch (err) {
 
-              </div>
+                  console.error(err);
 
-            </div>
+                }
+
+              }}
+            />
 
           ))}
 

@@ -17,47 +17,58 @@ export const ThumbnailProvider = ({ children }) => {
 
   // Shared Prompt Form State
   const [prompt, setPrompt] = useState("");
+
   const [style, setStyle] = useState("Modern Creator");
+
   const [aspectRatio, setAspectRatio] = useState("16:9");
 
   const [loading, setLoading] = useState(false);
+
   const [error, setError] = useState(null);
 
-  const generate = async () => {
-    try {
+  const [editingThumbnail, setEditingThumbnail] = useState(null);
 
+  const generate = async (override = null) => {
+    try {
       setLoading(true);
       setError(null);
 
-      const res = await generateThumbnail({
+      const payload = override ?? {
         prompt,
         style,
         aspectRatio,
-      });
+      };
 
-      // Preview updates immediately
+      const res = await generateThumbnail(payload);
       setThumbnail(res.data);
 
-      // History updates instantly
-      setHistory(prev => [res.data, ...prev]);
+      setHistory((prev) => [
+        res.data,
+        ...prev,
+      ]);
 
+      setEditingThumbnail(null);
       return res;
-
     } catch (err) {
-
       setError(
         err.response?.data?.message ||
-        "Generation failed"
+        "Failed to generate thumbnail."
       );
-
       throw err;
-
     } finally {
-
       setLoading(false);
-
     }
   };
+
+  const regenerate = async (item) => {
+
+  return await generate({
+    prompt: item.originalPrompt,
+    style: item.style,
+    aspectRatio: item.aspectRatio,
+  });
+
+};
 
   const fetchHistory = async () => {
 
@@ -100,6 +111,9 @@ export const ThumbnailProvider = ({ children }) => {
         history,
         setHistory,
 
+        editingThumbnail,
+        setEditingThumbnail,
+
         prompt,
         setPrompt,
 
@@ -113,6 +127,8 @@ export const ThumbnailProvider = ({ children }) => {
         error,
 
         generate,
+        regenerate,
+
         fetchHistory,
         removeThumbnail,
 

@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useEffect } from "react";
 import { Sparkles, Loader2 } from "lucide-react";
 import { useThumbnail } from "../../context/ThumbnailContext";
 import toast from "react-hot-toast";
+import TemplatesBar from "./TemplatesBar";
 
 const PromptForm = () => {
   const {
@@ -17,7 +18,26 @@ const PromptForm = () => {
     aspectRatio,
     setAspectRatio,
 
+    editingThumbnail,
+
   } = useThumbnail();
+
+  useEffect(() => {
+
+    if (!editingThumbnail) return;
+
+    setPrompt(editingThumbnail.originalPrompt);
+
+    setStyle(editingThumbnail.style);
+
+    setAspectRatio(editingThumbnail.aspectRatio);
+
+  }, [
+    editingThumbnail,
+    setPrompt,
+    setStyle,
+    setAspectRatio,
+  ]);
 
   const handleGenerate = async () => {
     if (!prompt.trim()) {
@@ -64,6 +84,10 @@ const PromptForm = () => {
         <div>
 
           <div className="mb-2 flex items-center justify-between">
+
+            <TemplatesBar
+              onSelect={setPrompt}
+            />
 
             <label className="text-sm font-medium text-slate-300">
               Prompt

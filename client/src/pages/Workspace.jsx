@@ -6,6 +6,7 @@ import HistoryGrid from "../components/workspace/History/HistoryGrid";
 import { useEffect } from "react";
 import { useThumbnail } from "../context/ThumbnailContext";
 
+import CreatorAssistant from "../components/workspace/CreatorAssistant/CreatorAssistant";
 
 const Workspace = () => {
   const { fetchHistory } = useThumbnail();
@@ -50,6 +51,8 @@ const Workspace = () => {
 
           </div>
 
+          <CreatorAssistant />
+          
           <HistoryGrid />
 
         </div>
