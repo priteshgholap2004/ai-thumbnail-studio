@@ -7,6 +7,8 @@ import errorHandler from "./middleware/error.middleware.js";
 
 import thumbnailRoutes from "./routes/thumbnail.routes.js";
 
+import creatorRoutes from "./routes/creator.routes.js";
+
 const app = express();
 
 // Middleware
@@ -27,7 +29,7 @@ app.use("/api/users",userRoutes);
 
 app.use("/api/thumbnails",thumbnailRoutes);
 
-
+app.use("/api/creator", creatorRoutes);
 
 // Home Route
 app.get("/", (req, res) => {

@@ -47,3 +47,17 @@ Return ONLY the enhanced prompt.
 
   return response.text.trim();
 };
+
+export const generateTitles = async (instruction) => {
+
+  const response = await ai.models.generateContent({
+
+    model: "gemini-flash-latest",
+
+    contents: instruction,
+
+  });
+
+  return response.text.trim();
+
+};
