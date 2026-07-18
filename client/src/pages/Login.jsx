@@ -148,8 +148,8 @@ const Login = () => {
                                     onChange={handleChange}
                                     placeholder="Enter your email"
                                     className={`w-full rounded-2xl bg-slate-900 py-3 pl-14 pr-4 text-white outline-none transition-all duration-300 ${errors.email
-                                            ? "border border-red-500"
-                                            : "border border-white/10 focus:border-violet-500"
+                                        ? "border border-red-500"
+                                        : "border border-white/10 focus:border-violet-500"
                                         }`}
                                 />
 
@@ -185,8 +185,8 @@ const Login = () => {
                                     onChange={handleChange}
                                     placeholder="Enter your password"
                                     className={`w-full rounded-2xl bg-slate-900 py-3 pl-14 pr-12 text-white outline-none transition-all duration-300 ${errors.password
-                                            ? "border border-red-500"
-                                            : "border border-white/10 focus:border-violet-500"
+                                        ? "border border-red-500"
+                                        : "border border-white/10 focus:border-violet-500"
                                         }`}
                                 />
 
@@ -212,7 +212,17 @@ const Login = () => {
                                 </p>
                             )}
 
+                            
+
                         </div>
+                        <div className="flex justify-end">
+                                <Link
+                                    to="/forgot-password"
+                                    className="text-sm text-violet-400 hover:text-violet-300 transition"
+                                >
+                                    Forgot Password?
+                                </Link>
+                            </div>
 
                         <button
                             disabled={loading}
