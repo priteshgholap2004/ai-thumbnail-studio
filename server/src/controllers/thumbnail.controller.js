@@ -5,7 +5,7 @@ import {
   uploadImage,
   deleteImage,
 } from "../services/cloudinary.service.js";
-import Thumbnail from "../models/Thumbnail.model.js";
+import Thumbnail from "../models/thumbnail.model.js";
 import User from "../models/User.model.js";
 
 // Generate Thumbnail
