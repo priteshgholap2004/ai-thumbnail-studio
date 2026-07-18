@@ -6,6 +6,16 @@ import crypto from "crypto";
 import generateResetToken from "../utils/generateResetToken.js";
 import { sendEmail } from "../services/email.service.js";
 
+const cookieOptions = {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite:
+        process.env.NODE_ENV === "production"
+            ? "none"
+            : "lax",
+    maxAge: 7 * 24 * 60 * 60 * 1000,
+};
+
 export const registerUser = async (req, res) => {
     try {
         const { name, email, password } = req.body;
@@ -43,12 +53,7 @@ export const registerUser = async (req, res) => {
         );
 
         res
-            .cookie("token", token, {
-                httpOnly: true,
-                secure: false,
-                sameSite: "lax",
-                maxAge: 7 * 24 * 60 * 60 * 1000,
-            })
+            .cookie("token", token, cookieOptions)
             .status(201)
             .json({
                 success: true,
@@ -126,12 +131,7 @@ export const loginUser = async (req, res) => {
         //     message:"login successfull",
         // });
         res
-            .cookie("token", token, {
-                httpOnly: true,
-                secure: false,
-                sameSite: "lax",
-                maxAge: 7 * 24 * 60 * 60 * 1000,
-            })
+            .cookie("token", token, cookieOptions)
             .status(200)
             .json({
                 success: true,
@@ -176,11 +176,15 @@ export const getProfile = asyncHandler(async (req, res) => {
 //logout
 
 export const logoutUser = (req, res) => {
-    res.clearCookie("token", {
-        httpOnly: true,
-        secure: false,
-        sameSite: "lax",
-    })
+    res
+        .clearCookie("token", {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite:
+                process.env.NODE_ENV === "production"
+                    ? "none"
+                    : "lax",
+        })
         .status(200)
         .json({
             success: true,
