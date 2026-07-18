@@ -58,14 +58,14 @@ const TemplatesBar = ({
         ✨ Quick Templates
       </p>
 
-      <div className="flex flex-wrap gap-2">
+      <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
 
         {templates.map((template) => (
 
           <button
             key={template.title}
             onClick={() => onSelect(template.prompt)}
-            className="rounded-full bg-white/5 px-4 py-2 text-sm text-slate-300 transition hover:bg-violet-600 hover:text-white"
+            className="whitespace-nowrap rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-slate-300 transition-all duration-300 hover:scale-105 hover:border-violet-500 hover:bg-violet-600 hover:text-white"
           >
             {template.title}
           </button>

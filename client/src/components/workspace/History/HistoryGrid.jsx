@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import ImageModal from "../ImageModal";
-import { Trash2, Download } from "lucide-react";
+import { Trash2 } from "lucide-react";
 import { useThumbnail } from "../../../context/ThumbnailContext";
 import DeleteModal from "../DeleteModal";
 import HistoryCard from "./HistoryCard";
@@ -82,7 +82,7 @@ const HistoryGrid = () => {
 
   useEffect(() => {
     fetchHistory();
-  }, []);
+  }, [fetchHistory]);
 
   return (
     <section className="mt-10">
@@ -105,11 +105,11 @@ const HistoryGrid = () => {
       <div className="mb-6 flex items-center justify-between">
 
         <h2 className="text-2xl font-bold text-white">
-          Recent Creations
+          Recent Thumbnails
         </h2>
 
         <span className="rounded-full bg-violet-500/10 px-3 py-1 text-sm text-violet-400">
-          {history.length} Images
+          {history.length} Thumbnails
         </span>
 
       </div>
@@ -141,17 +141,32 @@ const HistoryGrid = () => {
 
         </div>
 
-      ) : history.length === 0 ? (
+      ) : filteredHistory.length === 0 ? (
 
-        <div className="rounded-3xl border border-dashed border-white/10 bg-white/5 py-16 text-center">
+        <div className="rounded-3xl border border-dashed border-white/10 bg-white/5 py-20">
 
-          <h3 className="text-xl font-semibold text-white">
-            No thumbnails yet
-          </h3>
+          <div className="mx-auto flex max-w-md flex-col items-center text-center">
 
-          <p className="mt-2 text-slate-400">
-            Generate your first AI thumbnail to see it here.
-          </p>
+            <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-violet-500/10">
+
+              <Trash2
+                size={42}
+                className="text-violet-400"
+              />
+
+            </div>
+
+            <h3 className="text-2xl font-bold text-white">
+              No Thumbnails Found
+            </h3>
+
+            <p className="mt-3 text-slate-400">
+              {history.length === 0
+                ? "Generate your first AI thumbnail to start building your history."
+                : "No thumbnails match your current search or filter."}
+            </p>
+
+          </div>
 
         </div>
 

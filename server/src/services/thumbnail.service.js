@@ -16,8 +16,6 @@ export const generateThumbnailAI = async (enhancedPrompt) => {
 
     try {
 
-      console.log(`\nTrying model: ${model}`);
-
       const image = await client.textToImage({
         
         model,
@@ -26,14 +24,10 @@ export const generateThumbnailAI = async (enhancedPrompt) => {
 
       const arrayBuffer = await image.arrayBuffer();
 
-      console.log(`Success with ${model}`);
 
       return Buffer.from(arrayBuffer);
 
     } catch (err) {
-
-      console.log(`Failed: ${model}`);
-      console.log(err.message);
 
       lastError = err;
 

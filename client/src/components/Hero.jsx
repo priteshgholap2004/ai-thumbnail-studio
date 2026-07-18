@@ -2,7 +2,6 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import heroPreviewData from "../constants/heroPreviewData";
 import { ArrowRight } from "lucide-react";
-import FadeInSection from "../components/common/FadeInSection";
 
 const Hero = () => {
   const [currentPreview, setCurrentPreview] = useState(0);

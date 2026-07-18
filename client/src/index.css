@@ -25,3 +25,13 @@ body{
   animation: fadeSlide 0.45s ease;
 }
 
+/* Hide horizontal scrollbar */
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

@@ -8,20 +8,21 @@ import {
     EyeOff,
 } from "lucide-react";
 
-import { registerUser } from "../services/auth.service";
+import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
 
 const Register = () => {
     const [formData, setFormData] = useState({
-        fullName: "",
+        name: "",
         email: "",
         password: "",
         confirmPassword: "",
     });
 
     const navigate = useNavigate();
+    const { register } = useAuth();
 
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -44,8 +45,8 @@ const Register = () => {
     const validateForm = () => {
         const newErrors = {};
 
-        if (!formData.fullName.trim()) {
-            newErrors.fullName = "Full name is required";
+        if (!formData.name.trim()) {
+            newErrors.name = "Full name is required";
         }
 
         if (!formData.email.trim()) {
@@ -82,13 +83,7 @@ const Register = () => {
         try {
             setLoading(true);
 
-            const response = await registerUser({
-                name: formData.fullName,
-                email: formData.email,
-                password: formData.password,
-            });
-
-            console.log(response);
+            const response = await register(formData);
 
             toast.success(response.message);
 
@@ -162,19 +157,19 @@ const Register = () => {
 
                                 <input
                                     type="text"
-                                    name="fullName"
-                                    value={formData.fullName}
+                                    name="name"
+                                    value={formData.name}
                                     onChange={handleChange}
                                     placeholder="Enter your full name"
                                     className={`w-full rounded-2xl bg-slate-900 py-3 pl-14 pr-4 text-white outline-none transition-all duration-300
-                                    ${errors.fullName
+                                    ${errors.name
                                             ? "border border-red-500 focus:border-red-500"
                                             : "border border-white/10 focus:border-violet-500"
                                         }`}
                                 />
-                                {errors.fullName && (
+                                {errors.name && (
                                     <p className="mt-2 text-sm text-red-400">
-                                        {errors.fullName}
+                                        {errors.name}
                                     </p>
                                 )}
 

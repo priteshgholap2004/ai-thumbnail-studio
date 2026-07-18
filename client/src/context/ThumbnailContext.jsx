@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useCallback, } from "react";
 import {
   generateThumbnail,
   getThumbnailHistory,
@@ -62,29 +62,22 @@ export const ThumbnailProvider = ({ children }) => {
 
   const regenerate = async (item) => {
 
-  return await generate({
-    prompt: item.originalPrompt,
-    style: item.style,
-    aspectRatio: item.aspectRatio,
-  });
-
-};
-
-  const fetchHistory = async () => {
-
-    try {
-
-      const res = await getThumbnailHistory();
-
-      setHistory(res.data);
-
-    } catch (err) {
-
-      console.error(err);
-
-    }
+    return await generate({
+      prompt: item.originalPrompt,
+      style: item.style,
+      aspectRatio: item.aspectRatio,
+    });
 
   };
+
+  const fetchHistory = useCallback(async () => {
+    try {
+      const res = await getThumbnailHistory();
+      setHistory(res.data);
+    } catch (err) {
+      console.error(err);
+    }
+  }, []);
 
   const removeThumbnail = async (id) => {
 

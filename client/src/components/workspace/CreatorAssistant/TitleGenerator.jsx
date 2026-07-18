@@ -25,7 +25,7 @@ const TitleGenerator = () => {
       await getTitles(prompt);
 
       toast.success("Titles generated successfully.");
-    } catch (err) {
+    } catch{
       toast.error("Failed to generate titles.");
     }
   };

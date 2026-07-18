@@ -6,7 +6,7 @@ import {
     Eye,
     EyeOff,
 } from "lucide-react";
-import { loginUser } from "../services/auth.service";
+import { useAuth } from "../context/AuthContext";
 import toast from "react-hot-toast";
 
 const Login = () => {
@@ -20,6 +20,7 @@ const Login = () => {
     const [errors, setErrors] = useState({});
 
     const navigate = useNavigate();
+    const { login } = useAuth();
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -63,12 +64,7 @@ const Login = () => {
         try {
             setLoading(true);
 
-            const response = await loginUser({
-                email: formData.email,
-                password: formData.password,
-            });
-
-            console.log(response);
+            const response = await login(formData);
 
             toast.success(response.message);
 

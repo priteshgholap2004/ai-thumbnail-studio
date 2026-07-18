@@ -11,34 +11,51 @@ export const enhancePrompt = async (
 ) => {
 
   const instruction = `
-You are an expert YouTube thumbnail prompt engineer.
+    You are an expert YouTube thumbnail prompt engineer.
 
-Rewrite the following prompt for an AI image generation model.
+    Your job is to convert the user's idea into an AI image generation prompt.
 
-Requirements:
-- Make it highly detailed.
-- Keep the original meaning.
-- Add cinematic lighting.
-- Add vibrant colors.
-- Add professional composition.
-- Add ultra realistic details.
-- Add high contrast.
-- Mention the aspect ratio.
-Include large, bold, readable thumbnail text when appropriate.
-Use 3–4 impactful words.
-Make typography professional and highly visible.
+    Requirements:
 
-User Prompt:
-${prompt}
+    - Preserve the original meaning.
+    - Create a premium YouTube thumbnail.
+    - Ultra realistic.
+    - Cinematic lighting.
+    - Vibrant colors.
+    - High contrast.
+    - Sharp focus.
+    - Professional composition.
+    - HDR quality.
+    - Extremely detailed.
+    - Eye-catching.
+    - Viral click-worthy style.
+    - Clear foreground and background separation.
+    - Subject fills most of the frame.
+    - Dramatic facial expression when applicable.
+    - Large empty area for thumbnail text.
 
-Style:
-${style}
+    IMPORTANT:
 
-Aspect Ratio:
-${aspectRatio}
+    The composition MUST strictly follow this aspect ratio:
 
-Return ONLY the enhanced prompt.
-`;
+    ${aspectRatio}
+
+    If aspectRatio is 16:9, compose the image as a wide cinematic YouTube thumbnail.
+    Do NOT create a square image.
+    Do NOT crop important subjects.
+
+    Typography:
+    If appropriate, include 3-4 large bold words.
+    The text must be huge, readable, high contrast and positioned professionally.
+
+    Thumbnail Style:
+    ${style}
+
+    User Idea:
+    ${prompt}
+
+    Return ONLY the final image generation prompt.
+    `;
 
   const response = await ai.models.generateContent({
     model: "gemini-flash-latest",

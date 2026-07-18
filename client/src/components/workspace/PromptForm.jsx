@@ -23,7 +23,7 @@ const PromptForm = () => {
 
   } = useThumbnail();
 
-  const { checkAuth } = useAuth();
+  const { user, checkAuth } = useAuth();
 
   useEffect(() => {
 
@@ -48,6 +48,11 @@ const PromptForm = () => {
       return;
     }
 
+    if (!user || user.credits < 3) {
+      toast.error("You need at least 3 credits to generate a thumbnail.");
+      return;
+    }
+
     try {
       await generate();
 
@@ -66,9 +71,9 @@ const PromptForm = () => {
   };
 
   return (
-    <div className="rounded-2xl md:rounded-3xl border border-white/10 bg-white/5 p-5">
+    <div className="min-w-0 rounded-2xl border border-white/10 bg-white/5 p-4 md:rounded-3xl md:p-5">
 
-      <div className="mb-6">
+      <div className="mb-4">
 
         <div className="inline-flex items-center rounded-full border border-violet-500/20 bg-violet-500/10 px-3 py-1 text-xs font-medium text-violet-300">
           AI Workspace
@@ -84,28 +89,30 @@ const PromptForm = () => {
 
       </div>
 
-      <div className="space-y-4">
+      <div className="space-y-3">
 
         <div>
 
-          <div className="mb-2 flex items-center justify-between">
+          <div className="mb-4">
 
-            <TemplatesBar
-              onSelect={setPrompt}
-            />
+            <TemplatesBar onSelect={setPrompt} />
 
-            <label className="text-sm font-medium text-slate-300">
-              Prompt
-            </label>
+            <div className="mt-3 flex items-center justify-between">
 
-            <span className="text-xs text-slate-500">
-              {prompt.length} / 1000
-            </span>
+              <label className="text-sm font-medium text-slate-300">
+                Prompt
+              </label>
+
+              <span className="text-xs text-slate-500">
+                {prompt.length} / 1000
+              </span>
+
+            </div>
 
           </div>
 
           <textarea
-            rows={5}
+            rows={4}
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
             placeholder="Example: MrBeast shocked face holding ₹1 Crore with dramatic lighting..."
@@ -118,7 +125,30 @@ const PromptForm = () => {
 
         </div>
 
-        <div className="grid gap-4 md:grid-cols-2">
+        <button
+          onClick={handleGenerate}
+          disabled={thumbnailLoading || !user || user.credits < 3}
+          className="flex w-full min-w-0 items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-violet-600 to-purple-500 px-6 py-3.5 font-semibold text-white transition hover:scale-[1.02] disabled:cursor-not-allowed disabled:from-slate-700 disabled:to-slate-700 disabled:text-slate-400 disabled:hover:scale-100"
+        >
+          {thumbnailLoading ? (
+            <>
+              <Loader2 className="animate-spin" size={20} />
+              Generating...
+            </>
+          ) : user?.credits < 3 ? (
+            <>
+              <Sparkles size={20} />
+              Not Enough Credits
+            </>
+          ) : (
+            <>
+              <Sparkles size={20} />
+              Generate Thumbnail
+            </>
+          )}
+        </button>
+
+        <div className="grid gap-3 md:grid-cols-2">
 
           <div>
 
@@ -129,7 +159,7 @@ const PromptForm = () => {
             <select
               value={style}
               onChange={(e) => setStyle(e.target.value)}
-              className="w-full rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-3 text-white"
+              className="w-full rounded-xl border border-white/10 bg-slate-900/80 px-4 py-2.5 text-white transition focus:border-violet-500"
             >
               <option>Modern Creator</option>
               <option>Cinematic</option>
@@ -159,7 +189,7 @@ const PromptForm = () => {
             <select
               value={aspectRatio}
               onChange={(e) => setAspectRatio(e.target.value.split(" ")[0])}
-              className="w-full rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-3 text-white"
+              className="w-full rounded-xl border border-white/10 bg-slate-900/80 px-4 py-2.5 text-white transition focus:border-violet-500"
             >
               <option>16:9 — YouTube Thumbnail</option>
               <option>9:16 — Shorts / Reels</option>
@@ -172,23 +202,7 @@ const PromptForm = () => {
 
         </div>
 
-        <button
-          onClick={handleGenerate}
-          disabled={thumbnailLoading}
-          className="flex w-full items-center justify-center gap-3 rounded-2xl bg-gradient-to-r from-violet-600 to-purple-500 px-6 py-4 font-semibold text-white transition hover:scale-[1.02] disabled:opacity-50"
-        >
-          {thumbnailLoading ? (
-            <>
-              <Loader2 className="animate-spin" size={20} />
-              Generating...
-            </>
-          ) : (
-            <>
-              <Sparkles size={20} />
-              Generate Thumbnail
-            </>
-          )}
-        </button>
+
 
       </div>
 
