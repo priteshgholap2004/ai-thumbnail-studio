@@ -3,11 +3,12 @@ import { Sparkles, Loader2 } from "lucide-react";
 import { useThumbnail } from "../../context/ThumbnailContext";
 import toast from "react-hot-toast";
 import TemplatesBar from "./TemplatesBar";
+import { useAuth } from "../../context/AuthContext";
 
 const PromptForm = () => {
   const {
     generate,
-    loading,
+    thumbnailLoading,
 
     prompt,
     setPrompt,
@@ -21,6 +22,8 @@ const PromptForm = () => {
     editingThumbnail,
 
   } = useThumbnail();
+
+  const { checkAuth } = useAuth();
 
   useEffect(() => {
 
@@ -47,6 +50,8 @@ const PromptForm = () => {
 
     try {
       await generate();
+
+      await checkAuth();
 
       setPrompt("");
 
@@ -169,10 +174,10 @@ const PromptForm = () => {
 
         <button
           onClick={handleGenerate}
-          disabled={loading}
+          disabled={thumbnailLoading}
           className="flex w-full items-center justify-center gap-3 rounded-2xl bg-gradient-to-r from-violet-600 to-purple-500 px-6 py-4 font-semibold text-white transition hover:scale-[1.02] disabled:opacity-50"
         >
-          {loading ? (
+          {thumbnailLoading ? (
             <>
               <Loader2 className="animate-spin" size={20} />
               Generating...

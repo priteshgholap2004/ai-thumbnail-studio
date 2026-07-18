@@ -2,36 +2,45 @@ import { InferenceClient } from "@huggingface/inference";
 
 const client = new InferenceClient(process.env.HF_API_KEY);
 
-// export const generateThumbnailAI = async (enhancedPrompt) => {
-//   const image = await client.textToImage({
-//     provider: "hf-inference",
-//     model: "black-forest-labs/FLUX.1-schnell",
-//     inputs: enhancedPrompt,
-//   });
-
-//     const arrayBuffer = await image.arrayBuffer();
-
-//     const buffer = Buffer.from(arrayBuffer);
-
-//     return buffer;
-// };
+const MODELS = [
+  "black-forest-labs/FLUX.1-dev",
+  "stabilityai/stable-diffusion-3.5-large",
+  "stabilityai/stable-diffusion-xl-base-1.0",
+];
 
 export const generateThumbnailAI = async (enhancedPrompt) => {
-  try {
-    const image = await client.textToImage({
-      provider: "hf-inference",
-      model: "black-forest-labs/FLUX.1-schnell",
-      inputs: enhancedPrompt,
-    });
 
-    const arrayBuffer = await image.arrayBuffer();
+  let lastError = null;
 
-    return Buffer.from(arrayBuffer);
+  for (const model of MODELS) {
 
-  } catch (error) {
-    console.log("HF ERROR:");
-    console.log(error);
+    try {
 
-    throw error;
+      console.log(`\nTrying model: ${model}`);
+
+      const image = await client.textToImage({
+        
+        model,
+        inputs: enhancedPrompt,
+      });
+
+      const arrayBuffer = await image.arrayBuffer();
+
+      console.log(`Success with ${model}`);
+
+      return Buffer.from(arrayBuffer);
+
+    } catch (err) {
+
+      console.log(`Failed: ${model}`);
+      console.log(err.message);
+
+      lastError = err;
+
+    }
+
   }
+
+  throw lastError;
+
 };

@@ -22,7 +22,7 @@ export const ThumbnailProvider = ({ children }) => {
 
   const [aspectRatio, setAspectRatio] = useState("16:9");
 
-  const [loading, setLoading] = useState(false);
+  const [thumbnailLoading, setThumbnailLoading] = useState(false);
 
   const [error, setError] = useState(null);
 
@@ -30,7 +30,7 @@ export const ThumbnailProvider = ({ children }) => {
 
   const generate = async (override = null) => {
     try {
-      setLoading(true);
+      setThumbnailLoading(true);
       setError(null);
 
       const payload = override ?? {
@@ -56,7 +56,7 @@ export const ThumbnailProvider = ({ children }) => {
       );
       throw err;
     } finally {
-      setLoading(false);
+      setThumbnailLoading(false);
     }
   };
 
@@ -123,7 +123,7 @@ export const ThumbnailProvider = ({ children }) => {
         aspectRatio,
         setAspectRatio,
 
-        loading,
+        thumbnailLoading,
         error,
 
         generate,

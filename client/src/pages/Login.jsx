@@ -7,6 +7,7 @@ import {
     EyeOff,
 } from "lucide-react";
 import { loginUser } from "../services/auth.service";
+import toast from "react-hot-toast";
 
 const Login = () => {
     const [formData, setFormData] = useState({
@@ -69,13 +70,13 @@ const Login = () => {
 
             console.log(response);
 
-            alert(response.message);
+            toast.success(response.message);
 
             navigate("/workspace");
 
         } catch (error) {
 
-            alert(
+            toast.error(
                 error.response?.data?.message ||
                 "Login failed"
             );

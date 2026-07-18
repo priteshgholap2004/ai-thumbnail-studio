@@ -1,22 +1,33 @@
 import { createContext, useContext, useState } from "react";
-import { generateTitles } from "../services/creator.service";
+import {
+  generateTitles,
+  generateDescription,
+  generateTags,
+} from "../services/creator.service";
 
 const CreatorContext = createContext();
 
 export const CreatorProvider = ({ children }) => {
 
   const [titles, setTitles] = useState([]);
+  const [description, setDescription] = useState("");
+  const [tags, setTags] = useState([]);
 
-  const [loading, setLoading] = useState(false);
+  const [titlesLoading, setTitlesLoading] = useState(false);
 
+  const [descriptionLoading, setDescriptionLoading] = useState(false);
+
+  const [tagsLoading, setTagsLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  // ==========================
+  // Generate Titles
+  // ==========================
   const getTitles = async (prompt) => {
 
     try {
 
-      setLoading(true);
-
+      setTitlesLoading(true);
       setError(null);
 
       const res = await generateTitles(prompt);
@@ -36,7 +47,73 @@ export const CreatorProvider = ({ children }) => {
 
     } finally {
 
-      setLoading(false);
+      setTitlesLoading(false);
+
+    }
+
+  };
+
+  // ==========================
+  // Generate Description
+  // ==========================
+  const getDescription = async (prompt) => {
+
+    try {
+
+      setDescriptionLoading(true);
+      setError(null);
+
+      const res = await generateDescription(prompt);
+
+      setDescription(res.data);
+
+      return res.data;
+
+    } catch (err) {
+
+      setError(
+        err.response?.data?.message ||
+        "Failed to generate description."
+      );
+
+      throw err;
+
+    } finally {
+
+      setDescriptionLoading(false);
+
+    }
+
+  };
+
+  // ==========================
+  // Generate Tags
+  // ==========================
+  const getTags = async (prompt) => {
+
+    try {
+
+      setTagsLoading(true);
+      setError(null);
+
+      const res = await generateTags(prompt);
+
+      setTags(res.data);
+
+      return res.data;
+
+    } catch (err) {
+
+      setError(
+        err.response?.data?.message ||
+        "Failed to generate tags."
+      );
+
+      throw err;
+
+    } finally {
+
+      setTagsLoading(false);
 
     }
 
@@ -46,10 +123,21 @@ export const CreatorProvider = ({ children }) => {
 
     <CreatorContext.Provider
       value={{
+
         titles,
-        loading,
+        description,
+        tags,
+
+        titlesLoading,
+        descriptionLoading,
+        tagsLoading,
+
         error,
+
         getTitles,
+        getDescription,
+        getTags,
+
       }}
     >
 
@@ -61,5 +149,4 @@ export const CreatorProvider = ({ children }) => {
 
 };
 
-export const useCreator = () =>
-  useContext(CreatorContext);
+export const useCreator = () => useContext(CreatorContext);

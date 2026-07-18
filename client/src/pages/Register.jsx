@@ -10,6 +10,7 @@ import {
 
 import { registerUser } from "../services/auth.service";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 
 const Register = () => {
@@ -89,11 +90,11 @@ const Register = () => {
 
             console.log(response);
 
-            alert(response.message);
+            toast.success(response.message);
 
             navigate("/login");
         } catch (error) {
-            alert(
+            toast.error(
                 error.response?.data?.message ||
                 "Registration failed"
             );

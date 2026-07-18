@@ -7,7 +7,11 @@ import { useCreator } from "../../../context/CreatorContext";
 import { useThumbnail } from "../../../context/ThumbnailContext";
 
 const TitleGenerator = () => {
-  const { titles, loading, getTitles } = useCreator();
+  const {
+  titles,
+  titlesLoading,
+  getTitles,
+} = useCreator();
 
   const { prompt } = useThumbnail();
 
@@ -39,10 +43,10 @@ const TitleGenerator = () => {
     >
       <button
         onClick={handleGenerate}
-        disabled={loading}
+        disabled={titlesLoading}
         className="mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-violet-600 to-purple-500 py-3 font-semibold text-white transition hover:scale-[1.02] disabled:opacity-50"
       >
-        {loading ? (
+        {titlesLoading  ? (
           <>
             <Loader2 className="animate-spin" size={18} />
             Generating...

@@ -20,7 +20,7 @@ export const generateThumbnail = asyncHandler(async (req, res) => {
     });
   }
 
-  if (user.credits < 2) {
+  if (user.credits < 3) {
     return res.status(400).json({
       success: false,
       message: "Not enough credits",
@@ -67,7 +67,7 @@ export const generateThumbnail = asyncHandler(async (req, res) => {
     aspectRatio,
   });
 
-  user.credits -= 2;
+  user.credits -= 3;
   await user.save();
 
   res.status(201).json({
