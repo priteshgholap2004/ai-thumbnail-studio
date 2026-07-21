@@ -1,4 +1,5 @@
 import { InferenceClient } from "@huggingface/inference";
+import { generatePollinationsImage } from "./pollinations.service.js";
 
 const client = new InferenceClient(process.env.HF_API_KEY);
 
@@ -17,7 +18,6 @@ export const generateThumbnailAI = async (enhancedPrompt) => {
     try {
 
       const image = await client.textToImage({
-        
         model,
         inputs: enhancedPrompt,
       });
@@ -35,6 +35,14 @@ export const generateThumbnailAI = async (enhancedPrompt) => {
 
   }
 
-  throw lastError;
+  try {
+
+    return await generatePollinationsImage(enhancedPrompt);
+
+  } catch (pollinationsError) {
+
+    throw pollinationsError;
+
+  }
 
 };
